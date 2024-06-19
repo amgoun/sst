@@ -1,0 +1,38 @@
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+enum UserRole {
+  ADMIN
+  TEACHER
+  USER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  name      String?
+  email     String   @unique
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LmsCustomer {
+  id             String  @id @default(uuid())
+  userId         String  @unique
+  lsmsCustomerId String  @unique
+  priceId        String  @unique
+  hasAccess      Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
